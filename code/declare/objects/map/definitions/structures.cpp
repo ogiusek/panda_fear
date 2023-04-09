@@ -1,0 +1,4 @@
+class Structures{
+    public:
+    Structures(){};
+};
