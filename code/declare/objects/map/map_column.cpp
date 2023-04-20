@@ -1,4 +1,3 @@
-
 class Map_Column
 {
 public:
@@ -9,41 +8,38 @@ public:
 
     int xIndex;
 
-    vector<vector<Chunk> *> neighbours;
+    uint *map_first_column;
+    vector<Map_Column> *map;
+    Biomes *biomes;
     vector<Chunk> column;
 
-    Map_Column(int _xIndex, ushort *_render_dist, ushort *_field_size, ushort *_chunk_size)
-    {
-        render_dist = _render_dist;
-        field_size = _field_size;
-        chunk_size = _chunk_size;
-        xIndex = _xIndex;
-    };
+    Map_Column(int _xIndex, ushort *_render_dist, ushort *_field_size, ushort *_chunk_size,
+               Biomes *_biomes, vector<Map_Column> *_map, uint *_map_first_column)
+        : xIndex(_xIndex), render_dist(_render_dist), field_size(_field_size), chunk_size(_chunk_size),
+          biomes(_biomes), map(_map), map_first_column(_map_first_column) {}
 
-    void Draw(int player_x, int player_y, ushort *animation_frame)
+    void Draw(int player_x, int player_y, ushort &animation_frame)
     {
         int player_y_chunk = floor(player_y / float(*field_size * *chunk_size));
         for (short i = -*render_dist; i <= *render_dist; i++)
         {
-            column[Get_index(player_y_chunk + i)].Draw(player_x, player_y, animation_frame);
+            int ind = Get_index(player_y_chunk + i);
+            if (ind != -1)
+            {
+                column[ind].Draw(player_x, player_y, animation_frame);
+            }
         };
     };
 
-    void Update(int player_x, int player_y)
+    void Update(int &player_x, int &player_y)
     {
         int player_y_chunk = floor(player_y / float(*field_size * *chunk_size));
-        int required_chunks_size = 2 * *render_dist + 1;
-        int required_chunks[required_chunks_size];
-
-        for (int i = -*render_dist; i <= *render_dist; i++)
+        auto static_render_dist = *render_dist;
+        for (int i = -static_render_dist; i <= static_render_dist; i++)
         {
-            required_chunks[i + *render_dist] = player_y_chunk - i;
-        };
-        for (int i = 0; i <= required_chunks_size; i++)
-        {
-            if (!Found_in_column(required_chunks[i]))
+            if (!Found_in_column(i + player_y_chunk))
             {
-                Insert_new_chunk(required_chunks[i]);
+                Insert_new_chunk(i + player_y_chunk);
             };
         };
     };
@@ -58,7 +54,7 @@ public:
             }
         };
 
-        return 0;
+        return -1;
     };
 
 private:
@@ -74,11 +70,6 @@ private:
         return false;
     };
 
-    Chunk New_chunk(int yIndex)
-    {
-        return Chunk(xIndex, yIndex, field_size, chunk_size);
-    };
-
     void Insert_new_chunk(int index)
     {
         auto insert_pos = column.begin();
@@ -89,5 +80,12 @@ private:
         };
 
         column.insert(insert_pos, New_chunk(index));
+    };
+
+    Chunk New_chunk(int yIndex)
+    {
+        // return Chunk(xIndex, yIndex, field_size, chunk_size, (*biomes)(xIndex, yIndex));
+        return Chunk(xIndex, yIndex, field_size, chunk_size, biomes->get_biom(xIndex, yIndex));
+        // return Chunk(xIndex, yIndex, field_size, chunk_size, 0);
     };
 };

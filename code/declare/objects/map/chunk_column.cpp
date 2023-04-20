@@ -7,23 +7,20 @@ public:
     int xFieldIndex,
         yFieldIndex;
 
+    int biom;
+
     vector<Field> column;
 
-    Chunk_Column(int _xFieldIndex, int _yFieldIndex, ushort _xChunkIndex, ushort *_field_size, ushort *_chunk_size)
+    Chunk_Column(int _xFieldIndex, int _yFieldIndex, ushort _xChunkIndex, int _biom, ushort *_field_size, ushort *_chunk_size)
+        : xFieldIndex(_xFieldIndex), yFieldIndex(_yFieldIndex), xChunkIndex(_xChunkIndex), biom(_biom), field_size(_field_size), chunk_size(_chunk_size)
     {
-        xFieldIndex = _xFieldIndex;
-        yFieldIndex = _yFieldIndex;
-        xChunkIndex = _xChunkIndex;
-        field_size = _field_size;
-        chunk_size = _chunk_size;
-
         for (int i = 0; i < *chunk_size; i++)
         {
-            column.push_back(Field(xFieldIndex, yFieldIndex + i, xChunkIndex, i, field_size));
+            column.push_back(Field(xFieldIndex, yFieldIndex + i, xChunkIndex, i, biom, field_size));
         };
     };
 
-    void Draw(int player_x, int player_y, ushort *animation_frame)
+    void Draw(int &player_x, int &player_y, ushort &animation_frame)
     {
         for (short y = 0; y < *chunk_size; y++)
         {

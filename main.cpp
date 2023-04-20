@@ -6,13 +6,18 @@ int main(int argc, char *args[])
 
     while (running)
     {
-        if ((SDL_GetTicks() - lastFrame) >= (fps))
+        if ((SDL_GetTicks() - lastFrame) >= (fps_limit))
         {
+            add_fps();
+            thread remove_fps_thread(remove_fps);
+            remove_fps_thread.detach();
+
             ticks_beetwen_frames = lastFrame - SDL_GetTicks();
             lastFrame = SDL_GetTicks();
-            update();
+
+            Update();
             Draw();
-            input();
+            Input();
         }
     }
 

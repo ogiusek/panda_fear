@@ -3,8 +3,7 @@
 #include <SDL2/SDL_image.h>
 
 #include <iostream>
-#include <cstdlib>
-#include <fstream>
+#include <thread>
 #include <time.h>
 #include <vector>
 

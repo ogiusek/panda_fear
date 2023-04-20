@@ -1,4 +1,4 @@
-void input()
+void Input()
 {
     while (SDL_PollEvent(&event))
     {

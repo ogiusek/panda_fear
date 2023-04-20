@@ -17,7 +17,7 @@ public:
           speed = .2,
           mining_speed = 0,
           cutting_speed = 0;
-    short eq[6] = {0, 0, 0, 0, 0, 0};
+    // short eq[6] = {0, 0, 0, 0, 0, 0};
 
     Player()
     {
@@ -25,7 +25,7 @@ public:
         yPos = 0;
     };
 
-    void Draw(ushort *animation_frame)
+    void Draw(ushort &animation_frame)
     {
         string img = "Assets/Images/player/";
         img += direction;
@@ -35,7 +35,7 @@ public:
         }
         else
         {
-            img += to_string(*animation_frame / 7 % 4) + ".png";
+            img += to_string(animation_frame / 7 % 4) + ".png";
         };
         Draw_Image(WIDTH / 2, HEIGHT / 2, player_size, player_size, img);
     };

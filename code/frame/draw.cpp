@@ -5,6 +5,8 @@ void Draw()
 
     game.Draw();
 
+    Draw_Text(0, 0, {255, 255, 255}, 14, "fps:" + to_string(fps));
+
     SDL_RenderPresent(renderer);
 }
 // Draw_Image(0, 0, 800, 300, "Assets/Images/test.jpg");
