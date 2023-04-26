@@ -1,63 +1,32 @@
 class Field
 {
 public:
-    ushort *field_size,
-        xChunkIndex,
-        yChunkIndex;
-    int biom;
-    // string directory;
-    ushort image;
+    ushort *field_size, biom, image;
+
     vector<ushort> override_images;
 
     int xFieldIndex,
         yFieldIndex;
+    int xIndex,
+        yIndex;
 
-    Field(int _xFieldIndex, int _yFieldIndex, ushort _xChunkIndex, ushort _yChunkIndex, int _biom, ushort *_field_size)
-        : xFieldIndex(_xFieldIndex), yFieldIndex(_yFieldIndex), xChunkIndex(_xChunkIndex), yChunkIndex(_yChunkIndex), biom(_biom), field_size(_field_size)
+    // vector<vector<Field *> *> *map;
+
+    Field(
+        int _xFieldIndex, int _yFieldIndex, int _biom,
+        ushort *_field_size
+        //   , vector<vector<Field *> *> *_map
+        )
+        : xFieldIndex(_xFieldIndex), yFieldIndex(_yFieldIndex),
+          xIndex(_xFieldIndex), yIndex(_yFieldIndex),
+          biom(_biom),
+          field_size(_field_size)
+    //   , map(_map)
     {
-        int rVal = rand() % 8;
-        switch (rVal)
-        {
-        case 0:
-            image = get_field_image_index("img1/image9x2");
-            break;
-        case 1:
-            image = get_field_image_index("img1/image9x3");
-            break;
-        case 2:
-            image = get_field_image_index("img1/image10x2");
-            break;
-        case 3:
-            image = get_field_image_index("img1/image10x3");
-            break;
-        case 4:
-            image = get_field_image_index("img1/image11x2");
-            break;
-        case 5:
-            image = get_field_image_index("img1/image11x3");
-            break;
-        case 6:
-            image = get_field_image_index("img1/image11x4");
-            break;
-        case 7:
-            image = get_field_image_index("img1/image11x5");
-            break;
-        };
+        image = get_field(biom);
 
-        if (abs(xChunkIndex) % 8 == 0 && abs(yChunkIndex) % 8 == 1)
-        {
-            override_images.push_back(get_field_image_index("img8/9x8"));
-            override_images.push_back(get_field_image_index("img8/9x9"));
-            override_images.push_back(get_field_image_index("img8/9x10"));
-            override_images.push_back(get_field_image_index("img8/9x11"));
-        }
-        else if (abs(xChunkIndex) % 8 == 0 && abs(yChunkIndex) % 8 == 0)
-        {
-            override_images.push_back(get_field_image_index("img8/8x8"));
-            override_images.push_back(get_field_image_index("img8/8x9"));
-            override_images.push_back(get_field_image_index("img8/8x10"));
-            override_images.push_back(get_field_image_index("img8/8x11"));
-        };
+        //"img8/9x8", "img8/9x9", "img8/9x10", "img8/9x11"
+        //"img8/8x8", "img8/8x9", "img8/8x10", "img8/8x11"
     };
 
     void Draw(int &player_x, int &player_y, ushort &animation_frame)

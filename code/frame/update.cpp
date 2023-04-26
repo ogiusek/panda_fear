@@ -5,5 +5,5 @@ void Update()
     else
         SDL_SetWindowFullscreen(window, 0);
 
-    game.Update();
+    game->Update();
 };

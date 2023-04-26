@@ -13,5 +13,5 @@ void Input()
         if (event.type == SDL_KEYDOWN && keystates[SDL_SCANCODE_F11])
             fullscreen = !fullscreen;
     }
-    game.Input();
+    game->Input();
 }

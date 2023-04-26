@@ -2,19 +2,18 @@ class Game
 {
 
 public:
-    float seed;
+    int seed;
     ushort difficultyLevel = 1,
            field_size = 32,
-           chunk_size = 8,
            render_dist = 1;
     Player *player;
     Map *map;
 
-    Game()
+    Game(int _seed)
     {
-        seed = time(NULL);
+        seed = _seed;
         srand(seed);
-        map = new Map(&field_size, &chunk_size, &render_dist);
+        map = new Map(&field_size, &render_dist);
         player = new Player();
     };
 

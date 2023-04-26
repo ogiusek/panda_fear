@@ -3,6 +3,7 @@
 int main(int argc, char *args[])
 {
     Init();
+    game = new Game(time(NULL));
 
     while (running)
     {

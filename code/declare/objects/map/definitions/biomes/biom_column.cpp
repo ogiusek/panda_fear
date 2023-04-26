@@ -25,22 +25,29 @@ private:
 
     uint get_index(int yPos)
     {
-        for (uint i = 0; i < column.size(); i++)
+        int left = 0;
+        int right = column.size() - 1;
+        while (left <= right)
         {
-            if (column[i].yPos == yPos)
-                return i;
+            int mid = (left + right) / 2;
+            if (column[mid].yPos == yPos)
+                return mid;
+            else if (column[mid].yPos < yPos)
+                left = mid + 1;
+            else
+                right = mid - 1;
         }
         return -1;
     }
 
     void update_biom_map_width(ushort width)
     {
-        while (xPos + (*first_column) - width < 0)
+        while (xPos + (*first_column) - width < 1)
         {
             *first_column += 1;
             biomes_map->insert(biomes_map->begin(), new Biom_Column(-*first_column, biomes_map, first_column));
         }
-        while (xPos + *first_column + width > biomes_map->size())
+        while (xPos + *first_column + width >= biomes_map->size() - 1)
         {
             biomes_map->push_back(new Biom_Column(biomes_map->size() - *first_column, biomes_map, first_column));
         }
@@ -48,29 +55,28 @@ private:
 
     void generate_biom(int yPos)
     {
-        ushort width = (rand() % 16) + 7,
-               height = (rand() % 18) + 6,
-               value = rand() % biomes_list.size();
-
-        short verctical_movement = rand() % 5 - 2,
-              horizontal_movement = rand() % 5 - 2;
+        const ushort width = (rand() % 100) + 40;
+        const ushort height = (rand() % 100) + 40;
+        const ushort value = rand() % biomes_list.size();
 
         update_biom_map_width(width);
 
-        for (auto i = -width; i < width; i++)
+        biomes_map->at(xPos + *first_column)->set_biom(yPos, value);
+        for (auto x = -width; x <= width; x++)
         {
-            for (auto j = -height; j < height; j++)
+            for (auto y = -height; y <= height; y++)
             {
-                auto abs_i = -abs(i + verctical_movement);
-                auto abs_j = -abs(j + horizontal_movement);
-                auto bigger_value = width;
-                if (bigger_value < height)
+                if (x == 0 && y == 0)
                 {
-                    bigger_value = height;
+                    biomes_map->at(x + xPos + *first_column)->set_biom(y + yPos, value);
+                    continue;
                 }
-                if ((abs_i + abs_j) >= ((-width) - height + bigger_value))
+                const auto dist = sqrt((x * x) + (y * y));
+                const float aspect = abs(x) + abs(y);
+                const auto max_dist = (((abs(x)) / aspect) * width) + (((abs(y)) / aspect) * height);
+                if (dist <= max_dist)
                 {
-                    biomes_map->at(i + xPos + *first_column)->set_biom(j + yPos, value);
+                    biomes_map->at(x + xPos + *first_column)->set_biom(y + yPos, value);
                 }
             }
         }
@@ -90,7 +96,8 @@ public:
         while (insert_pos != column.end() && insert_pos->yPos < index)
         {
             insert_pos += 1;
-        };
+        }
+
         column.insert(insert_pos, Biom(xPos, index, value));
     };
 

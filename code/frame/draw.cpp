@@ -3,7 +3,7 @@ void Draw()
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
     Draw_Rectangle(0, 0, WIDTH, HEIGHT);
 
-    game.Draw();
+    game->Draw();
 
     Draw_Text(0, 0, {255, 255, 255}, 14, "fps:" + to_string(fps));
 

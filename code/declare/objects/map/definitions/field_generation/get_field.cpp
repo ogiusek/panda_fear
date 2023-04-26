@@ -13,7 +13,27 @@ ushort get_field_image_index(string image)
     return field_images.size() - 1;
 }
 
-string get_field(int biom)
+ushort get_field(int biom)
 {
-    return "img1/image9x2";
+    switch (rand() % 20)
+    {
+    case 0:
+        return get_field_image_index("img1/image9x2");
+    case 1:
+        return get_field_image_index("img1/image9x3");
+    case 2:
+        return get_field_image_index("img1/image10x2");
+    case 3:
+        return get_field_image_index("img1/image10x3");
+    case 4:
+        return get_field_image_index("img1/image11x2");
+    case 5:
+        return get_field_image_index("img1/image11x3");
+    case 6:
+        return get_field_image_index("img1/image11x4");
+    case 7:
+        return get_field_image_index("img1/image11x5");
+    default:
+        return get_field_image_index("img1/image8x7");
+    };
 };
